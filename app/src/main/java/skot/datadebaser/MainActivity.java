@@ -55,11 +55,12 @@ public class MainActivity extends Activity implements View.OnTouchListener, View
             nameDisplay.setText(item.getItemName());
 
             View removeButton = (View) newItemView.findViewById(R.id.btnRemoveItem);
+
             removeButton.setTag(item.getItemName());
             removeButton.setOnLongClickListener(this);
 
             newItemView.setTag(item);
-            newItemView.setOnTouchListener(this);
+            newItemView.setOnLongClickListener(this);
 
             foodItemDisplayArea.addView(newItemView);
         }
@@ -119,23 +120,44 @@ public class MainActivity extends Activity implements View.OnTouchListener, View
 
     @Override
     public boolean onLongClick(View view) {
-        removeItem(view);
+
+        Object tag = view.getTag();
+
+        if (tag == null) {
+            System.out.println("NULL!");
+            return false;
+        }
+
+        if (tag instanceof FoodItem) {
+            FoodItem item = (FoodItem) tag;
+            System.out.println(((FoodItem) tag).getItemName() + ":" + item.getDateAsString());
+
+            // display modal
+        }
+
+        else if (tag instanceof String) {
+            removeItem(view);
+        }
+
+
+
+
         return false;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-            // Show modal?
-
-            FoodItem item = (FoodItem) v.getTag();
-            if (item != null) {
-                System.out.println("ITEM: " + item.getItemName() + " CREATED: " + item.getDateAsString());
-            } else
-                System.out.println("CLICK");
-        }
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//
+//            // Show modal?
+//
+//            FoodItem item = (FoodItem) v.getTag();
+//            if (item != null) {
+//                System.out.println("ITEM: " + item.getItemName() + " CREATED: " + item.getDateAsString());
+//            } else
+//                System.out.println("CLICK");
+//        }
 
         return false;
     }
