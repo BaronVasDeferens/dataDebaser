@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         EditText editText = (EditText) findViewById(R.id.editItemName);
         editText.requestFocus();
-        toggleSoftKeyboard();
+        showSoftKeyboard();
     }
 
     // Triggered when the user clicks on "ADD"
@@ -101,25 +101,35 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         EditText editText = (EditText) findViewById(R.id.editItemName);
         editText.clearFocus();
 
-        toggleSoftKeyboard();
+        hideSoftKeyboard();
     }
 
 
-    private void toggleSoftKeyboard() {
+    private void showSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+    }
+
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         FoodItem item = (FoodItem) v.getTag();
         if (item != null) {
-            System.out.println("ITEM = " + item.getItemName());
-            System.out.println("CREATED = " + item.getDateCreated());
+            System.out.println("ITEM: " + item.getItemName() + " CREATED: " + item.getDateAsString());
         } else
             System.out.println("CLICK");
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // just eat it
     }
 
     private class FoodItemLoader extends AsyncTask<Void, List<FoodItem>, List<FoodItem>> {
@@ -139,7 +149,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         @Override
         protected List<FoodItem> doInBackground(FoodItem... foodItems) {
-            foodItemDatabase.foodItemDao().addFoodItem(foodItems[0]);
+            foodItemDatabase.foodItemDao().addNewFoodItem(foodItems[0]);
             return foodItemDatabase.foodItemDao().getAllFoodItems();
         }
 
