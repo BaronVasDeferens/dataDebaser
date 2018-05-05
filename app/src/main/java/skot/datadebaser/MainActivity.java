@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends Activity implements View.OnTouchListener {
+public class MainActivity extends Activity implements View.OnTouchListener, View.OnLongClickListener {
 
     public static final int FOOD_ITEM_DATA = 1;
 
@@ -54,8 +54,9 @@ public class MainActivity extends Activity implements View.OnTouchListener {
             TextView nameDisplay = (TextView) newItemView.findViewById(R.id.itemNameDisplay);
             nameDisplay.setText(item.getItemName());
 
-            Button button = (Button) newItemView.findViewById(R.id.btnRemoveItem);
-            button.setTag(item.getItemName());
+            View removeButton = (View) newItemView.findViewById(R.id.btnRemoveItem);
+            removeButton.setTag(item.getItemName());
+            removeButton.setOnLongClickListener(this);
 
             newItemView.setTag(item);
             newItemView.setOnTouchListener(this);
@@ -65,7 +66,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
     }
 
-    // Display the "add new item area"
+    // Triggered when user clicks "ADD TO LIST"
     public void addFoodItem(View view) {
         LinearLayout addItemArea = (LinearLayout) findViewById(R.id.addItemArea);
         addItemArea.setVisibility(View.VISIBLE);
@@ -85,25 +86,26 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     }
 
     public void removeItem(View view) {
-
         String itemName = (String) view.getTag();
-
         FoodItem item = new FoodItem(itemName);
         new FoodItemRemover().execute(item);
-
     }
 
     // When user presses "FINISH"
     public void hideNewItem(View view) {
+
+        // Submit any pending text for addition to the db...
+        EditText editText = (EditText) findViewById(R.id.editItemName);
+        if (editText.getText().toString().length() > 0) {
+            createNewFoodItem(null);
+        }
+
         LinearLayout addItemArea = (LinearLayout) findViewById(R.id.addItemArea);
         addItemArea.setVisibility(View.GONE);
 
-        EditText editText = (EditText) findViewById(R.id.editItemName);
         editText.clearFocus();
-
         hideSoftKeyboard();
     }
-
 
     private void showSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -115,14 +117,25 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 
+    @Override
+    public boolean onLongClick(View view) {
+        removeItem(view);
+        return false;
+    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        FoodItem item = (FoodItem) v.getTag();
-        if (item != null) {
-            System.out.println("ITEM: " + item.getItemName() + " CREATED: " + item.getDateAsString());
-        } else
-            System.out.println("CLICK");
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+            // Show modal?
+
+            FoodItem item = (FoodItem) v.getTag();
+            if (item != null) {
+                System.out.println("ITEM: " + item.getItemName() + " CREATED: " + item.getDateAsString());
+            } else
+                System.out.println("CLICK");
+        }
 
         return false;
     }
@@ -131,6 +144,8 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     public void onBackPressed() {
         // just eat it
     }
+
+
 
     private class FoodItemLoader extends AsyncTask<Void, List<FoodItem>, List<FoodItem>> {
         @Override

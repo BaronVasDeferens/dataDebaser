@@ -4,7 +4,6 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20sp"
     tools:context="skot.datadebaser.MainActivity">
 
     <LinearLayout
@@ -16,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/lightBlue"
             android:gravity="center_horizontal">
 
             <TextView
@@ -29,30 +29,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="addFoodItem"
-                android:text="ADD ITEM" />
+                android:text="ADD TO LIST" />
 
         </LinearLayout>
 
-
+        <!-- Hold controls for adding new food items -->
         <LinearLayout
             android:id="@+id/addItemArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/darker_gray"
+            android:background="@color/lightBlue"
             android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="25sp"
             android:visibility="gone">
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Item Name : " />
 
             <EditText
                 android:id="@+id/editItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="enter item name here"
+                android:hint="What would you like to add to your list?"
                 android:inputType="text" />
 
             <LinearLayout
@@ -79,24 +76,20 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="25sp"
-            android:orientation="vertical"></LinearLayout>
-
         <ScrollView
             android:id="@+id/foodItemDisplayScrollView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/foodItemDisplayArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
+            </LinearLayout>
 
         </ScrollView>
 
-
     </LinearLayout>
+
 </RelativeLayout>
