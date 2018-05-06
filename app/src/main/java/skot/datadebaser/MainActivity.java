@@ -1,6 +1,7 @@
 package skot.datadebaser;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -14,10 +15,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends Activity implements View.OnTouchListener, View.OnLongClickListener {
+public class MainActivity extends Activity implements  View.OnLongClickListener {
 
     public static final int FOOD_ITEM_DATA = 1;
 
@@ -133,31 +135,16 @@ public class MainActivity extends Activity implements View.OnTouchListener, View
             System.out.println(((FoodItem) tag).getItemName() + ":" + item.getDateAsString());
 
             // display modal
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder
+                .setTitle(item.getItemName())
+                .setMessage(item.getDateAsString())
+                .show();
         }
 
         else if (tag instanceof String) {
             removeItem(view);
         }
-
-
-
-
-        return false;
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//
-//            // Show modal?
-//
-//            FoodItem item = (FoodItem) v.getTag();
-//            if (item != null) {
-//                System.out.println("ITEM: " + item.getItemName() + " CREATED: " + item.getDateAsString());
-//            } else
-//                System.out.println("CLICK");
-//        }
 
         return false;
     }
@@ -166,8 +153,6 @@ public class MainActivity extends Activity implements View.OnTouchListener, View
     public void onBackPressed() {
         // just eat it
     }
-
-
 
     private class FoodItemLoader extends AsyncTask<Void, List<FoodItem>, List<FoodItem>> {
         @Override
