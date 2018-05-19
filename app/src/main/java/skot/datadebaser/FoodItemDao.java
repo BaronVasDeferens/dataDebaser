@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public abstract class FoodItemDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void addFoodItem(FoodItem foodItem);
 
     @Delete

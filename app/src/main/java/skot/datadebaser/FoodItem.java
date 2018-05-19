@@ -9,7 +9,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * Created by skot on 11/26/17.
+ * Food Item
+ * (or maybe more accurately, "list item")
+ * Describes a repeatedly-purchased item and when it was initially added.
  */
 
 @Entity(tableName = "fooditem", primaryKeys = {"itemname"})
@@ -27,6 +29,7 @@ public class FoodItem {
         this.itemName = itemName;
     }
 
+    @NonNull
     public String getItemName() {
         return itemName;
     }
