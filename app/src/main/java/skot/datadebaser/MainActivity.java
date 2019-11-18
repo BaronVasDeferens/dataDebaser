@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements  View.OnLongClickListener 
         LinearLayout addItemArea = (LinearLayout) findViewById(R.id.addItemArea);
         addItemArea.setVisibility(View.VISIBLE);
 
-        EditText editText = (EditText) findViewById(R.id.editItemName);
+        EditText editText = findViewById(R.id.editItemName);
         editText.requestFocus();
         showSoftKeyboard();
     }
@@ -82,10 +82,14 @@ public class MainActivity extends Activity implements  View.OnLongClickListener 
     // Triggered when the user clicks on "ADD"
     public void createNewFoodItem(View view) {
 
-        EditText editText = (EditText) findViewById(R.id.editItemName);
-        FoodItem item = new FoodItem(editText.getText().toString());
-        new FoodItemAdder().execute(item);
-        editText.setText("");
+        EditText editText = findViewById(R.id.editItemName);
+
+        final String content = editText.getText().toString();
+        if (content.length() > 0) {
+            FoodItem item = new FoodItem(content);
+            new FoodItemAdder().execute(item);
+            editText.setText("");
+        }
     }
 
     public void removeItem(View view) {
@@ -98,12 +102,12 @@ public class MainActivity extends Activity implements  View.OnLongClickListener 
     public void hideNewItem(View view) {
 
         // Submit any pending text for addition to the db...
-        EditText editText = (EditText) findViewById(R.id.editItemName);
+        EditText editText = findViewById(R.id.editItemName);
         if (editText.getText().toString().length() > 0) {
             createNewFoodItem(null);
         }
 
-        LinearLayout addItemArea = (LinearLayout) findViewById(R.id.addItemArea);
+        LinearLayout addItemArea = findViewById(R.id.addItemArea);
         addItemArea.setVisibility(View.GONE);
 
         editText.clearFocus();
